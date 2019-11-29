@@ -1,0 +1,3 @@
+include:
+  - .google-cloud
+  - .epel

@@ -1,5 +1,15 @@
+{% load_yaml as os_map %}
+
+Debian:
+  default_path: /etc/default/kubelet
+
+RedHat:
+  default_path: /etc/sysconfig/kubelet
+
+{% endload %}
+{% set map = salt['grains.filter_by'](os_map) %}
+
 include:
-  - repos.epel
   - repos.google-cloud
 
 kubeadm-packages:
@@ -15,12 +25,11 @@ containerd-runtime:
   pkg.installed:
     - name: containerd
     - require:
-        - pkg: epel
         - pkg: kubeadm-packages
 
 kubelet-args:
   file.managed:
-    - name: /etc/sysconfig/kubelet
+    - name: {{ map['default_path'] }}
     - contents: KUBELET_EXTRA_ARGS=--cgroup-driver=systemd
     - require:
         - pkg: kubeadm-packages

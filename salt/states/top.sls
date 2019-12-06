@@ -5,4 +5,4 @@ base:
     - kubeadm
   'os:SmartOS':
     - match: grain
-    - vms
+    - zones

@@ -1,4 +1,4 @@
-{% set cluster_mine = salt['mine.get']('etcd*', 'ip') | dictsort() %}
+{% set cluster_mine = salt['mine.get']('kube-etcd*', 'ip') | dictsort() %}
 {% set cluster = [] %}
 {% for name, host in cluster_mine %}
   {% do cluster.append(name ~ "=https://" ~ host[0] ~ ":2380") %}
@@ -41,7 +41,7 @@ kubeadm-etcd-generate-server-certs-{{ name }}:
         kubeadm init phase certs etcd-healthcheck-client --config=/deploy/{{ name }}/kubeadm-etcd.yaml && \
         kubeadm init phase certs apiserver-etcd-client --config=/deploy/{{ name }}/kubeadm-etcd.yaml && \
         find /etc/kubernetes/pki/etcd -type f -not -name ca.key -not -name ca.crt -exec mv {} /deploy/{{ name }}/pki/etcd \; && \
-        mv /etc/kubernetes/pki/apiserver-etcd-client.{crt,key} /deploy/{{ name }}/pki/ && \
+        mv /etc/kubernetes/pki/apiserver-etcd-client.* /deploy/{{ name }}/pki/ && \
         cp /etc/kubernetes/pki/etcd/ca.crt /deploy/{{ name }}/pki/etcd/
     - creates:
         - /deploy/{{ name }}/pki/apiserver-etcd-client.crt

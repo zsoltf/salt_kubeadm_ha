@@ -50,7 +50,7 @@ zone_{{ zone['name'] }}:
         hostname: {{ zone['name'] }}
         tags:
           name: {{ zone['name'] }}
-          type: {{ zone['name'].split('-')[0] }}
+          type: {{ zone['name'].split('-')[1] }}
           role: 'kubernetes'
           owner: 'zsolt'
         disks:
@@ -76,7 +76,8 @@ zone_{{ zone['name'] }}:
               - 'chmod +x /usr/sbin/policy-rc.d'
               - 'rm /etc/apt/apt.conf.d/50unattended-upgrades'
               - 'echo "nameserver {{ zone['resolvers']|join(' ') }}\nsearch {{ zone['dns_domain'] }}" > /etc/resolv.conf'
-              - 'systemctl mask dev-vda2.swap'
+              - 'systemctl mask swap.target'
+              - 'swapoff -a'
 
             dns_domain: {{ zone['dns_domain'] }}
 
@@ -93,7 +94,7 @@ zone_{{ zone['name'] }}:
               conf:
                 master: '10.250.18.111'
               grains:
-                type: {{ zone['name'].split('-')[0] }}
+                type: {{ zone['name'].split('-')[1] }}
                 role: 'kubernetes'
                 env: 'test'
                 owner: 'zsolt'

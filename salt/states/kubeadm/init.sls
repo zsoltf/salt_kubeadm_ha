@@ -10,6 +10,7 @@ RedHat:
 {% set map = salt['grains.filter_by'](os_map) %}
 
 include:
+  - .containerd
   - repos.google-cloud
 
 kubeadm-packages:
@@ -20,12 +21,6 @@ kubeadm-packages:
         - kubelet
     - require:
         - google-cloud-repo
-
-containerd-runtime:
-  pkg.installed:
-    - name: containerd
-    - require:
-        - pkg: kubeadm-packages
 
 kubelet-args:
   file.managed:

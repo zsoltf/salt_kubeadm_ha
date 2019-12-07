@@ -12,7 +12,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:01:01'
+        - mac: '02:5c:a1:ab:1e:01'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -28,7 +28,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:02:01'
+        - mac: '02:5c:a1:ab:1e:02'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -44,7 +44,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:03:01'
+        - mac: '02:5c:a1:ab:1e:03'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -62,7 +62,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:01:02'
+        - mac: '02:5c:a1:ab:1e:04'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -78,7 +78,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:02:02'
+        - mac: '02:5c:a1:ab:1e:05'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -94,7 +94,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:03:02'
+        - mac: '02:5c:a1:ab:1e:06'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -112,7 +112,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:01:03'
+        - mac: '02:5c:a1:ab:1e:07'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -128,7 +128,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:02:03'
+        - mac: '02:5c:a1:ab:1e:08'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -144,7 +144,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:03:03'
+        - mac: '02:5c:a1:ab:1e:09'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -162,7 +162,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:04:01'
+        - mac: '02:5c:a1:ab:1e:0a'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -180,7 +180,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:04:02'
+        - mac: '02:5c:a1:ab:1e:0b'
           ip: dhcp
           mtu: 1500
           nic_tag: admin
@@ -198,7 +198,7 @@
       dns_domain: discdrive.bayphoto.com
       image_uuid: 9aa48095-da9d-41ca-a094-31d1fb476b98
       nics:
-        - mac: '00:00:00:00:04:03'
+        - mac: '02:5c:a1:ab:1e:0c'
           ip: dhcp
           mtu: 1500
           nic_tag: admin

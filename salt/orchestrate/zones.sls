@@ -1,5 +1,7 @@
 ### create vms ###
 
+{% load_yaml as kvm_states %}
+
 # for kvm
 create-etcd-1-node:
   salt.function:
@@ -133,11 +135,13 @@ create-worker-3-node:
         - salt: create-master-2-node
         - salt: create-master-3-node
 
-# for bhyve
-#create-zones:
-#  salt.state:
-#    - tgt: 'frigate-*'
-#    - sls: zones
+{% endload %}
+
+create-zones:
+  salt.state:
+    - tgt: 'os:SmartOS'
+    - tgt_type: grain
+    - sls: zones
 
 wait-for-minions:
   salt.wait_for_event:

@@ -35,24 +35,25 @@ ubuntu-18-cloudimg:
     - name: imgadm import 9aa48095-da9d-41ca-a094-31d1fb476b98
     - creates: /dev/zvol/dsk/zones/9aa48095-da9d-41ca-a094-31d1fb476b98
 
-{% set zones = salt['pillar.get']('zones', []) %}
+{% set zones = salt['pillar.get']('zones', {}) %}
 
-{% for zone in zones %}
+{% for name, zone in zones.items() %}
 
-zone_{{ zone['name'] }}:
+zone_{{ name }}:
   smartos.vm_present:
     - vmconfig:
         brand: {{ zone['brand'] }}
-        alias: {{ zone['name'] }}
-        vcpus: {{ zone['vcpus'] }}
+        alias: {{ name }}
+        vcpus: {{ zone['cpus'] }}
         ram: {{ zone['ram'] }}
         resolvers: {{ zone['resolvers'] }}
-        hostname: {{ zone['name'] }}
+        hostname: {{ name }}
         tags:
-          name: {{ zone['name'] }}
-          type: {{ zone['name'].split('-')[1] }}
-          role: 'kubernetes'
-          owner: 'zsolt'
+          app: 'kubernetes'
+          env: {{ zone['env']|default('test') }}
+          name: {{ name }}
+          role: {{ name.split('-')[1] }}
+          owner: {{ zone['owner']|default('root') }}
         disks:
           disk0:
             image_uuid: {{ zone['image_uuid'] }}
@@ -92,12 +93,12 @@ zone_{{ zone['name'] }}:
 
             salt_minion:
               conf:
-                master: '10.250.18.111'
+                master: {{ grains['master'] }}
               grains:
-                type: {{ zone['name'].split('-')[1] }}
-                role: 'kubernetes'
-                env: 'test'
-                owner: 'zsolt'
+                app: 'kubernetes'
+                role: {{ name.split('-')[1] }}
+                env: {{ zone['env']|default('test') }}
+                owner: {{ zone['owner']|default('root') }}
 
             mounts:
               - [ swap ]
@@ -107,13 +108,14 @@ zone_{{ zone['name'] }}:
 
             disable_root: false
             users:
-              - name: zsolt
+              - name: {{ zone['owner']|default('root') }}
                 groups: adm,sudo,lxd
                 sudo: "ALL=(ALL) NOPASSWD:ALL"
                 lock_passwd: true
                 shell: /bin/bash
                 ssh_authorized_keys:
                   - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDThfGA6c88VJPeqJHSRlQT8GplLGUXidtHc+3L4zHHu31H5By2yRnWEnCB1+MXgmP41kFhu1ZKa6TfvrbDXVsXj7awQt0d45RP9mKcKTMCKK41PXap78bsz9QcNdYVI1UP3BGEQRxrrIo3QINVzgz1cu9Wqwcer03KA4pf/6givvYCAEUr9U5/HC6BoBzqS1CxrUVVOuL9lCrVaFZOXN0fldsjXNn2CYjIDxvST1oygOB7lfIaS61HS3mBfrqCvTrg+uFZYybvlrvMGBkIox+RVSRve+hZ0nAsJj+FG7owT6QN3Ncyrcrf7aRSOXYGRA5Uvx5UH6JQoBDwKVpWai+x kryten@trusty
+                  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCr8LopRSIg+Ng7oWqEqfxcXL+Ly8FK3E1A/RMvMHOOSV7zXCrqZnFhtXA3PByYG0xXRJjI2G2Kt0OwCR6UWfRSom/GIXuZQUyd8fq6QaceY+L7SnyekLRsfpTaJ6hxQoxCi18tiIMJQhp21reclyJ9up1Sncju75y1T2aI9Gu035TYBFGs9kiGOz+MI25TDiUKmXML9UcWaOzTtt2WQopV9i0sYHtSFeOKT3UCqtjCzy/tx9iOn8c0Hzzpm/7L8KPBlOZXCit2NlmWjWzX+fhdGt/i2NOmpZ1Ni0bX4FRwvTTJevdl8KPm0Epef/63wOAoKER5F0lY3BgKYwTdfshn zsolt@hyperion
 
             final_message: "Is this thing on? $UPTIME"
 

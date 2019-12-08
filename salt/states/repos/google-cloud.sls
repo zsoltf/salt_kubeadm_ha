@@ -19,4 +19,4 @@ RedHat:
 {% set map = salt['grains.filter_by'](os_map) %}
 
 google-cloud-repo:
-  pkgrepo.managed: {{ map.pkgrepo|yaml }}
+  pkgrepo.managed: {{ map['pkgrepo']|yaml }}

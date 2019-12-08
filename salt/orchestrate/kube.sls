@@ -2,12 +2,14 @@
 
 install-kubeadm-on-etcd:
   salt.state:
-    - tgt: 'kube-etcd-*'
+    - tgt: 'role:etcd'
+    - tgt_type: 'grain'
     - sls: kubeadm
 
 install-etcd-service:
   salt.state:
-    - tgt: 'kube-etcd-*'
+    - tgt: 'role:etcd'
+    - tgt_type: 'grain'
     - sls: kubeadm.etcd.service
     - require:
         - salt: install-kubeadm-on-etcd
@@ -19,16 +21,10 @@ generate-etcd-certs:
     - require:
         - salt: install-etcd-service
 
-deploy-etcd-certs:
+deploy-etcd-configs:
   salt.state:
-    - tgt: 'kube-etcd-*'
-    - sls: kubeadm.etcd.certs
-    - require:
-        - salt: generate-etcd-certs
-
-generate-etcd-manifests:
-  salt.state:
-    - tgt: 'kube-etcd-*'
+    - tgt: 'role:etcd'
+    - tgt_type: 'grain'
     - sls: kubeadm.etcd.config
     - require:
-        - salt: deploy-etcd-certs
+        - salt: generate-etcd-certs

@@ -1,14 +1,3 @@
-{% load_yaml as os_map %}
-
-Debian:
-  default_path: /etc/default/kubelet
-
-RedHat:
-  default_path: /etc/sysconfig/kubelet
-
-{% endload %}
-{% set map = salt['grains.filter_by'](os_map) %}
-
 include:
   - .containerd
   - repos.google-cloud
@@ -22,15 +11,15 @@ kubeadm-packages:
     - require:
         - google-cloud-repo
 
-kubelet-args:
+kubelet-config:
   file.managed:
-    - name: {{ map['default_path'] }}
-    - contents: KUBELET_EXTRA_ARGS=--cgroup-driver=systemd
-    - require:
-        - pkg: kubeadm-packages
+    - name: /var/lib/kubelet/config.yaml
+    - makedirs: True
+    - contents: |
+        apiVersion: kubelet.config.k8s.io/v1beta1
+        kind: KubeletConfiguration
+        cgroupDriver: systemd
 
-kubelet-service-enabled:
-  service.enabled:
+kubelet-service:
+  service.running:
     - name: kubelet
-    - require:
-        - file: kubelet-args

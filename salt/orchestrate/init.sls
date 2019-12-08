@@ -2,12 +2,12 @@ orchestrate-zones:
   salt.runner:
     - name: state.orchestrate
     - mods:
-        - orch.zones
+        - orchestrate.zones
 
 orchestrate-kubernetes:
   salt.runner:
     - name: state.orchestrate
     - mods:
-        - orch.kube
+        - orchestrate.kube
     - require:
         - salt: orchestrate-zones

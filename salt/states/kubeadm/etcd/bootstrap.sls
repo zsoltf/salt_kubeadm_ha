@@ -23,12 +23,23 @@ kubeadm-deploy-dir-{{ name }}:
 kubeadm-config-{{ name }}:
   file.managed:
     - name: /deploy/{{ name }}/kubeadm-etcd.yaml
-    - source: salt://kubeadm/etcd/kubeadm.yaml.jinja
-    - template: jinja
-    - context:
-        cluster: {{ cluster|join(",") }}
-        host: {{ host[0] }}
-        name: {{ name }}
+    - contents: |
+        apiVersion: "kubeadm.k8s.io/v1beta2"
+        kind: ClusterConfiguration
+        etcd:
+          local:
+            serverCertSANs:
+              - "{{ host[0] }}"
+            peerCertSANs:
+              - "{{ host[0] }}"
+            extraArgs:
+                initial-cluster: {{ cluster|join(",") }}
+                initial-cluster-state: new
+                name: {{ name }}
+                listen-peer-urls: https://{{ host[0] }}:2380
+                listen-client-urls: https://{{ host[0] }}:2379
+                advertise-client-urls: https://{{ host[0] }}:2379
+                initial-advertise-peer-urls: https://{{ host[0] }}:2380
     - require:
         - file: kubeadm-deploy-dir-{{ name }}
         - cmd: kubeadm-etcd-generate-ca

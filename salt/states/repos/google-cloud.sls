@@ -1,5 +1,8 @@
 {% load_yaml as os_map %}
 
+default:
+  pkgrepo: []
+
 Debian:
   pkgrepo:
     - humanname: Google Cloud

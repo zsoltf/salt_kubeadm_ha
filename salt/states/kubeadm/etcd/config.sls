@@ -1,14 +1,16 @@
-kubeadm-etcd-generate-manifest:
-  cmd.run:
-    - name: kubeadm init phase etcd local --config=/etc/kubernetes/kubeadm-etcd.yaml
-    - creates: /etc/kubernetes/manifests/etcd.yaml
-
 kubeadm-etcd-certificates:
   file.recurse:
     - name: /etc/kubernetes
     - source: salt://minionfs/kube-etcd-1.{{ grains['domain'] }}/deploy/{{ grains['id'] }}
     #- show_changes: False
     - keep_source: False
+
+kubeadm-etcd-generate-manifest:
+  cmd.run:
+    - name: kubeadm init phase etcd local --config=/etc/kubernetes/kubeadm-etcd.yaml
+    - creates: /etc/kubernetes/manifests/etcd.yaml
+    - require:
+        - file: kubeadm-etcd-certificates
 
 etcd-kubelet-config:
   file.managed:

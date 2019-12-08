@@ -5,7 +5,7 @@ etcd-service-manager:
     - contents: |
         [Service]
         ExecStart=
-        ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --cgroup-driver=systemd --container-runtime-endpoint=unix:///run/containerd/containerd.sock
+        ExecStart=/usr/bin/kubelet --address=127.0.0.1 --pod-manifest-path=/etc/kubernetes/manifests --cgroup-driver=systemd
         Restart=always
 
 #ExecStart=/usr/bin/kubelet --config=/etc/kubernetes/kubelet.yaml

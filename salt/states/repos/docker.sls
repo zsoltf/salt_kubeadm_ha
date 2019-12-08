@@ -1,19 +1,25 @@
 {% load_yaml as os_map %}
 
+default:
+  pkgrepo: []
+
 Debian:
-  key: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable'
-  url: 'deb https://apt.kubernetes.io/ kubernetes-xenial main'
+  pkgrepo:
+    - humanname: Docker CE Stable
+    - name: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+    - keyserver: 'https://download.docker.com/linux/ubuntu/gpg'
+    - keyid: '7EA0A9C3F273FCD8'
+    - file: /etc/apt/sources.list.d/docker-ce.list
 
 RedHat:
-  key: 'https://download.docker.com/linux/centos/gpg'
-  url: 'https://download.docker.com/linux/centos/7/$basearch/stable'
+  pkgrepo:
+    - humanname: Docker CE Stable
+    - baseurl: 'https://download.docker.com/linux/centos/7/$basearch/stable'
+    - gpgcheck: 1
+    - gpgkey: 'https://download.docker.com/linux/centos/gpg'
 
 {% endload %}
 {% set map = salt['grains.filter_by'](os_map) %}
 
 docker-ce-stable:
-  pkgrepo.managed:
-    - humanname: Docker CE Stable
-    - baseurl: {{ map['url'] }}
-    - gpgcheck: 1
-    - gpgkey: {{ map['key'] }}
+  pkgrepo.managed: {{ map['pkgrepo']|yaml }}

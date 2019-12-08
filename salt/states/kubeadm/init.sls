@@ -1,5 +1,5 @@
 include:
-  - .containerd
+  - .docker
   - repos.google-cloud
 
 kubeadm-packages:
@@ -8,6 +8,7 @@ kubeadm-packages:
         - kubeadm
         - kubectl
         - kubelet
+    - hold: True
     - require:
         - google-cloud-repo
 

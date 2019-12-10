@@ -4,18 +4,27 @@ base:
     - test
     - ip-mine
 
-  'kube:role:etcd':
-    - match: grain
-    - zones.kvm.etcd
 
-  'kube:role:lb':
-    - match: grain
-    - zones.kvm.lb
+  # datacenter
 
-  'kube:role:master':
+  'datacenter:*':
     - match: grain
-    - zones.kvm.master
+    - kube
 
-  'kube:role:worker':
+  # hypervisor pillars
+
+  'hyper:roles:etcd':
     - match: grain
-    - zones.kvm.worker
+    - zones.etcd
+
+  'hyper:roles:lb':
+    - match: grain
+    - zones.lb
+
+  'hyper:roles:master':
+    - match: grain
+    - zones.master
+
+  'hyper:roles:worker':
+    - match: grain
+    - zones.worker

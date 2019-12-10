@@ -1,49 +1,49 @@
-{% from 'zones/kvm/init.sls' import apply_placement, defaults %}
+{% from 'zones/init.sls' import apply_placement, defaults %}
 {% load_yaml as zones %}
 
-  kube-lb-1:
+  kube-master-1:
     brand: {{ defaults['brand'] }}
-    cpus: 2
+    cpus: 4
     dns_domain: {{ grains['domain'] }}
     image_uuid: {{ defaults['images']['ubuntu'] }}
     owner: {{ defaults['owner'] }}
     placement: alpha
-    ram: 512
+    ram: 1024
     resolvers: {{ grains['dns']['nameservers'] }}
     nics:
-      - mac: '02:5c:a1:ab:1e:02'
+      - mac: '02:5c:a1:ab:1e:03'
         ip: dhcp
         mtu: 1500
         nic_tag: admin
         model: virtio
 
-  kube-lb-2:
+  kube-master-2:
     brand: {{ defaults['brand'] }}
-    cpus: 2
+    cpus: 4
     dns_domain: {{ grains['domain'] }}
     image_uuid: {{ defaults['images']['ubuntu'] }}
     owner: {{ defaults['owner'] }}
     placement: beta
-    ram: 512
+    ram: 1024
     resolvers: {{ grains['dns']['nameservers'] }}
     nics:
-      - mac: '02:5c:a1:ab:1e:05'
+      - mac: '02:5c:a1:ab:1e:06'
         ip: dhcp
         mtu: 1500
         nic_tag: admin
         model: virtio
 
-  kube-lb-3:
+  kube-master-3:
     brand: {{ defaults['brand'] }}
-    cpus: 2
+    cpus: 4
     dns_domain: {{ grains['domain'] }}
     image_uuid: {{ defaults['images']['ubuntu'] }}
     owner: {{ defaults['owner'] }}
     placement: gamma
-    ram: 512
+    ram: 1024
     resolvers: {{ grains['dns']['nameservers'] }}
     nics:
-      - mac: '02:5c:a1:ab:1e:08'
+      - mac: '02:5c:a1:ab:1e:09'
         ip: dhcp
         mtu: 1500
         nic_tag: admin

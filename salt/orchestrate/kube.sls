@@ -1,30 +1,24 @@
-### install etcd ###
+# bootstrap:
+# edit pillar/kube.sls
+# set datacenter grain on hypervisors
+# salt 'frigate*' grains.set datacenter us-west-1
 
-install-kubeadm-on-etcd:
+hypervisor-grains:
   salt.state:
-    - tgt: 'role:etcd'
-    - tgt_type: 'grain'
-    - sls: kubeadm
+    - tgt: 'datacenter:*'
+    - tgt_type: grain
+    - sls: grains
 
-install-etcd-service:
-  salt.state:
-    - tgt: 'role:etcd'
-    - tgt_type: 'grain'
-    - sls: kubeadm.etcd.service
+orchestrate-zones:
+  salt.runner:
+    - name: state.orchestrate
+    - mods:
+        - orchestrate.zones
+
+orchestrate-kubeadm:
+  salt.runner:
+    - name: state.orchestrate
+    - mods:
+        - orchestrate.kubeadm
     - require:
-        - salt: install-kubeadm-on-etcd
-
-generate-etcd-certs:
-  salt.state:
-    - tgt: 'kube-etcd-1*'
-    - sls: kubeadm.etcd.bootstrap
-    - require:
-        - salt: install-etcd-service
-
-deploy-etcd-configs:
-  salt.state:
-    - tgt: 'role:etcd'
-    - tgt_type: 'grain'
-    - sls: kubeadm.etcd.config
-    - require:
-        - salt: generate-etcd-certs
+        - salt: orchestrate-zones

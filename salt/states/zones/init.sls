@@ -30,14 +30,14 @@ testo:
 #   smartos.image_present:
 #     - name: 9aa48095-da9d-41ca-a094-31d1fb476b98
 
-ubuntu-18-cloudimg:
-  cmd.run:
-    - name: imgadm import 9aa48095-da9d-41ca-a094-31d1fb476b98
-    - creates: /dev/zvol/dsk/zones/9aa48095-da9d-41ca-a094-31d1fb476b98
-
 {% set zones = salt['pillar.get']('zones', {}) %}
 
 {% for name, zone in zones.items() %}
+
+zone_{{ name }}_image:
+  cmd.run:
+    - name: imgadm import {{ zone['image_uuid'] }}
+    - creates: /dev/zvol/dsk/zones/{{ zone['image_uuid'] }}
 
 zone_{{ name }}:
   smartos.vm_present:
@@ -50,10 +50,10 @@ zone_{{ name }}:
         hostname: {{ name }}
         tags:
           app: 'kubernetes'
-          env: {{ zone['env']|default('test') }}
+          datacenter: {{ grains['datacenter'] }}
           name: {{ name }}
           role: {{ name.split('-')[1] }}
-          owner: {{ zone['owner']|default('root') }}
+          owner: {{ zone['owner'] }}
         disks:
           disk0:
             image_uuid: {{ zone['image_uuid'] }}
@@ -96,9 +96,10 @@ zone_{{ name }}:
                 master: {{ grains['master'] }}
               grains:
                 app: 'kubernetes'
-                role: {{ name.split('-')[1] }}
-                env: {{ zone['env']|default('test') }}
-                owner: {{ zone['owner']|default('root') }}
+                datacenter: {{ grains['datacenter'] }}
+                kube:
+                  role: {{ name.split('-')[1] }}
+                owner: {{ zone['owner'] }}
 
             mounts:
               - [ swap ]
@@ -108,7 +109,7 @@ zone_{{ name }}:
 
             disable_root: false
             users:
-              - name: {{ zone['owner']|default('root') }}
+              - name: {{ zone['owner'] }}
                 groups: adm,sudo,lxd
                 sudo: "ALL=(ALL) NOPASSWD:ALL"
                 lock_passwd: true

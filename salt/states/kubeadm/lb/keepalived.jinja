@@ -1,0 +1,28 @@
+! Configuration File for keepalived
+
+{% for script in scripts %}
+vrrp_script {{ script.name }} {
+    script "{{ script.value }}"
+    interval {{ script.interval }}
+    weight {{ script.weight }}
+}
+{% endfor %}
+
+{% for instance in virtual_instances %}
+vrrp_instance {{ instance.name }} {
+    state BACKUP
+    interface {{ instance.interface }}
+    virtual_router_id {{ instance.virtual_router_id }}
+    advert_int {{ instance.advert_int }}
+    authentication {
+        auth_type PASS
+        auth_pass {{ instance.password }}
+    }
+    track_script {
+        {{ instance.track_script }}
+    }
+    virtual_ipaddress {
+        {{ instance.virtual_ip }}
+    }
+}
+{% endfor %}

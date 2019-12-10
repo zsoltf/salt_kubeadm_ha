@@ -1,4 +1,4 @@
-{% set cluster_mine = salt['mine.get']('kube-etcd*', 'ip') | dictsort() %}
+{% set cluster_mine = salt['mine.get']('kube:role:etcd', 'ip', 'grain') | dictsort() %}
 {% set cluster = [] %}
 {% for name, host in cluster_mine %}
   {% do cluster.append(name ~ "=https://" ~ host[0] ~ ":2380") %}

@@ -1,4 +1,4 @@
-{% from 'zones/kvm/init.sls' import apply_placement, defaults %}
+{% from 'zones/init.sls' import apply_placement, defaults %}
 {% load_yaml as zones %}
 
   kube-etcd-1:
@@ -16,7 +16,7 @@
         mtu: 1500
         nic_tag: admin
         model: virtio
-  
+
   kube-etcd-2:
     brand: {{ defaults['brand'] }}
     cpus: 2
@@ -32,7 +32,7 @@
         mtu: 1500
         nic_tag: admin
         model: virtio
-  
+
   kube-etcd-3:
     brand: {{ defaults['brand'] }}
     cpus: 2

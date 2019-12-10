@@ -1,7 +1,10 @@
+{% set first_etcd = salt['mine.get']('kube:role:etcd', 'test.ping', 'grain') | dictsort() | first | first %}
+
 kubeadm-etcd-certificates:
   file.recurse:
     - name: /etc/kubernetes
-    - source: salt://minionfs/kube-etcd-1.{{ grains['domain'] }}/deploy/{{ grains['id'] }}
+    - source: salt://minionfs/{{ first_etcd }}.{{ grains['domain'] }}/deploy/{{ grains['id'] }}
+    - source: salt://minionfs/{{ first_etcd }}/deploy/{{ grains['id'] }}
     #- show_changes: False
     - keep_source: False
 

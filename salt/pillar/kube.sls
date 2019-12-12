@@ -60,7 +60,7 @@ us-west-1:
 home:
 
   default:
-    apiserver: 192.168.42.200
+    apiserver: 192.168.100.99
 
   prometheus:
     grains:

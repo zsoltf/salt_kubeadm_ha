@@ -16,6 +16,8 @@
         mtu: 1500
         nic_tag: admin
         model: virtio
+        allow_mac_spoofing: true
+        allow_ip_spoofing: true
 
   kube-worker-2:
     brand: {{ defaults['brand'] }}
@@ -32,6 +34,8 @@
         mtu: 1500
         nic_tag: admin
         model: virtio
+        allow_mac_spoofing: true
+        allow_ip_spoofing: true
 
   kube-worker-3:
     brand: {{ defaults['brand'] }}
@@ -48,6 +52,8 @@
         mtu: 1500
         nic_tag: admin
         model: virtio
+        allow_mac_spoofing: true
+        allow_ip_spoofing: true
 
 {% endload %}
 {{ apply_placement(zones) }}

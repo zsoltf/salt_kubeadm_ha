@@ -1,3 +1,6 @@
+#
+# Copy and paste the lines below to install the latest 64-bit tools set.
+#
 BOOTSTRAP_TAR="bootstrap-trunk-tools-20190317.tar.gz"
 BOOTSTRAP_SHA="7a17d30ee4fbd1203497ae424dcd64c40ccf5503"
 

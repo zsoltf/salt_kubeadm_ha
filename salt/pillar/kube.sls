@@ -15,8 +15,10 @@ us-west-1:
         - etcd
         - lb
         - master
+        - worker
       placements:
         - alpha
+        - delta
 
   frigate-2*:
     grains:
@@ -24,38 +26,30 @@ us-west-1:
         - etcd
         - lb
         - master
+        - worker
       placements:
         - beta
+        - epsilon
 
   frigate-3*:
     grains:
       roles:
         - etcd
         - lb
+        - worker
         - master
       placements:
         - gamma
-
-  frigate-4*:
-    grains:
-      roles:
-        - worker
-      placements:
-        - delta
-
-  frigate-5*:
-    grains:
-      roles:
-        - worker
-      placements:
-        - epsilon
-
-  frigate-6*:
-    grains:
-      roles:
-        - worker
-      placements:
         - zeta
+
+  #carrier-1*:
+  #  grains:
+  #    roles:
+  #      - worker
+  #    placements:
+  #      - delta
+  #      - epsilon
+  #      - zeta
 
 home:
 

@@ -42,9 +42,26 @@ install-lb:
 
 ### install control plane ###
 
-install-control-plane:
+install-kubeadm-on-control-plane:
   salt.state:
     - tgt: 'kube:role:master'
     - tgt_type: grain
     - sls:
-        - kubeadm.master
+        - kubeadm
+
+bootstrap-control-plane:
+  salt.state:
+    - tgt: 'G@kube:role:master and *-1*'
+    - tgt_type: compound
+    - sls: kubeadm.master.bootstrap
+    - require:
+        - salt: install-kubeadm-on-control-plane
+
+### install workers ###
+
+install-kubeadm-on-workers:
+  salt.state:
+    - tgt: 'kube:role:worker'
+    - tgt_type: grain
+    - sls:
+        - kubeadm

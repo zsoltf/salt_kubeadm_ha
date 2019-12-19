@@ -2,8 +2,8 @@
 
 create-zones:
   salt.state:
-    - tgt: 'os:SmartOS'
-    - tgt_type: grain
+    - tgt: 'G@os:SmartOS and G@datacenter:*'
+    - tgt_type: compound
     - sls: zones
 
 wait-for-minions:

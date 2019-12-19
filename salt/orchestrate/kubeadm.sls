@@ -49,13 +49,21 @@ install-kubeadm-on-control-plane:
     - sls:
         - kubeadm
 
-bootstrap-control-plane:
+bootstrap-first-control-plane:
   salt.state:
     - tgt: 'G@kube:role:master and *-1*'
     - tgt_type: compound
     - sls: kubeadm.master.bootstrap
     - require:
         - salt: install-kubeadm-on-control-plane
+
+join-control-planes:
+  salt.state:
+    - tgt: 'G@kube:role:master and not *-1*'
+    - tgt_type: compound
+    - sls: kubeadm.master.join
+    - require:
+        - salt: bootstrap-first-control-plane
 
 ### install workers ###
 
@@ -65,3 +73,14 @@ install-kubeadm-on-workers:
     - tgt_type: grain
     - sls:
         - kubeadm
+    - require:
+        - salt: join-control-planes
+
+join-workers:
+  salt.state:
+    - tgt: 'kube:role:worker'
+    - tgt_type: grain
+    - sls:
+        - kubeadm.worker
+    - require:
+        - salt: install-kubeadm-on-workers

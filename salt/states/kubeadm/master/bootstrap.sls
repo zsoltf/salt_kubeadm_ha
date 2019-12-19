@@ -1,13 +1,12 @@
 {% set etcd_cluster_mine = salt['mine.get']('kube:role:etcd', 'ip', 'grain') | dictsort() %}
 {% set first_etcd = salt['mine.get']('kube:role:etcd', 'test.ping', 'grain') | dictsort() | first | first %}
 {% set apiserver = pillar['kubernetes']['apiserver'] %}
+{% set token = pillar['kubernetes']['token'] %}
+{% set certificate_key = pillar['kubernetes']['certificate_key'] %}
 
 include:
   - kubeadm
 
-  # TODO: iterate over all masters
-  # boostrap first master
-  # join rest of masters
 kubeadm-etcd-certificates-for-master:
   file.recurse:
     - name: /etc/kubernetes
@@ -23,11 +22,11 @@ kubeadm-master-config:
     - contents: |
         apiVersion: kubeadm.k8s.io/v1beta2
         kind: InitConfiguration
-        #bootstrapTokens:
-        #  - token: "qsif7o.1vagz2tz9zuy9d73"
-        #    description: "kubeadm bootstrap token"
-        #    ttl: "24h"
-        #certificateKey: "cec4301ea5447f0ba6a06ef8715a553ae9b546e13f458b86a586f29e4562720c"
+        bootstrapTokens:
+          - token: "{{ token }}"
+            description: "kubeadm bootstrap token"
+            ttl: "24h"
+        certificateKey: "{{ certificate_key }}"
         nodeRegistration:
           criSocket: "/var/run/dockershim.sock"
           kubeletExtraArgs:
@@ -53,7 +52,7 @@ kubeadm-master-config:
 
 kubeadm-master-init:
   cmd.run:
-    - name: kubeadm init --config /etc/kubernetes/kubeadm-init.yaml
+    - name: kubeadm init --config /etc/kubernetes/kubeadm-init.yaml --upload-certs --skip-token-print
     - creates:
         - /etc/kubernetes/admin.conf
     - requires:

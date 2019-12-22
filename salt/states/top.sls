@@ -1,9 +1,6 @@
 base:
   '*':
     - test
-  'os:SmartOS':
-    - match: grain
-    - zones
 
   'kube:role:etcd':
     - match: grain

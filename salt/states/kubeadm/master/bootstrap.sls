@@ -55,5 +55,5 @@ kubeadm-master-init:
     - name: kubeadm init --config /etc/kubernetes/kubeadm-init.yaml --upload-certs --skip-token-print
     - creates:
         - /etc/kubernetes/admin.conf
-    - requires:
-        file: kubeadm-master-config
+    - require:
+        - file: kubeadm-master-config

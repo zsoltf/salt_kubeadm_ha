@@ -87,3 +87,9 @@ cd test
 
 ### kubeadm
 ### kubernetes
+
+
+## TODO
+- ssh keys from pillar
+- orchestrate on kvm clusters
+- redhat support

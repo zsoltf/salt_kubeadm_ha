@@ -2,14 +2,17 @@ base:
   '*':
     - test
 
+  'os:SmartOS':
+    - match: grain
+    - zones
+
   'kube:role:etcd':
     - match: grain
     - kubeadm.etcd
 
   'kube:role:lb':
     - match: grain
-    - kubeadm.lb.haproxy
-    - kubeadm.lb.keepalived
+    - kubeadm.lb
 
   'kube:role:master':
     - match: grain

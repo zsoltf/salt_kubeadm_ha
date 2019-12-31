@@ -2,16 +2,21 @@
 
 Create highly available Kubernetes clusters with Kubeadm and Salt.
 
-This state works with Ubuntu VMs. Centos/Fedora support will be added later.
+This state follows the official [kubeadm guide for HA clusters](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/) as close as possible.
+First, it bootstraps the Etcd cluster by generating all the certs on the first node, uploading them to the salt master and distributing them to the rest of the etcd nodes.
+Then it creates the VIP with keepalived and sets up HAProxy on the load balancers.
+After the LBs are up, the first master node bootstraps the kubernetes cluster using the tokens defined in the pillar.
+It then joins the rest of the control plane nodes, and once that's successful the worker nodes get joined.
 
-See *salt_kubeadm_ha_cluster* for an example on how to create highly available clusters on bare metal.
+It can bootstrap VMs on bare metal with SmartOS or existing VMs joined to a salt master can be used.
 
+Works with Ubuntu VMs. Centos/Fedora support will be added later.
 
 ## Quickstart
 
 #### Requirements
 
-Kubernetes nodes are named `kube-role-number` with grains `kube:role:rolename` set.
+A salt master and at least 11 VMs that are named `kube-role-number` with grains `kube:role:rolename` set.
 
 * Master with id `kube-master-\d.*` (kube-master-1, kube-master-2, kube-master-3)
 * LB with id `kube-lb-\d.*` (kube-lb-1, etc)
@@ -29,9 +34,9 @@ minionfs_mountpoint: salt://minionfs
 ```
 
 
-#### Set Grains
+#### Existing VMs
 
-manually:
+Set Grains
 ```
 salt 'kube-etcd-*' grains.set kube:role etcd
 salt 'kube-lb-*' grains.set kube:role lb
@@ -39,26 +44,68 @@ salt 'kube-master-*' grains.set kube:role master
 salt 'kube-worker-*' grains.set kube:role worker
 ```
 
-cloud-init example see `test/cloud-init`
+Cloud-init example see `test/cloud-init`
 
-#### Set Pillars
-
+Set Pillars
 `$EDITOR salt/pillar/kubernetes.sls`
 
-#### Verify Mine
-
+Verify Mine
 ```
 salt-call mine.get '*' ip
 ```
 
-#### Orchestrate
-
-Bootstrap a kubernetes cluster with addons
+Orchestrate
 ```
 salt-run state.orch orchestrate.kube
 ```
 
-Run in steps:
+Or run in steps:
+Bootstrap a blank cluster
+```
+salt-run state.orch orchestrate.kubeadm
+```
+Apply addons and user accounts
+```
+salt-run state.orch orchestrate.kubernetes
+```
+
+#### Bare Metal
+
+Create a cluster of VMs on three or more bare metal machines using SmartOS. VMs can be KVM or bhyve based on cpu support.
+
+Set datacenter grain
+```
+salt 'frigate-*' grains.set datacenter us-west-1
+```
+
+Edit Kubernetes pillar
+```
+$EDITOR salt/pillar/kubernetes.sls
+```
+
+Define VM size, type and placements for each datacenter
+```
+$EDITOR salt/pillar/zones/*
+```
+
+Verify pillar, grains and mine data
+```
+salt '*' mine.get '*' ip
+salt '*' pillar.items
+salt '*' grains.item datacenter
+```
+
+Create KVM/Bhyve zones
+```
+salt-run state.orch orchestrate.zones
+```
+
+Create a Kubernetes cluster
+```
+salt-run state.orch orchestrate.kube
+```
+
+Or run in steps:
 Bootstrap a blank cluster
 ```
 salt-run state.orch orchestrate.kubeadm

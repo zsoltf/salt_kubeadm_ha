@@ -36,7 +36,7 @@ zone_{{ name }}:
           '{{ nic['mac'] }}': {{ nic|yaml }}
           {%- endfor %}
         customer_metadata:
-          root_authorized_keys: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDThfGA6c88VJPeqJHSRlQT8GplLGUXidtHc+3L4zHHu31H5By2yRnWEnCB1+MXgmP41kFhu1ZKa6TfvrbDXVsXj7awQt0d45RP9mKcKTMCKK41PXap78bsz9QcNdYVI1UP3BGEQRxrrIo3QINVzgz1cu9Wqwcer03KA4pf/6givvYCAEUr9U5/HC6BoBzqS1CxrUVVOuL9lCrVaFZOXN0fldsjXNn2CYjIDxvST1oygOB7lfIaS61HS3mBfrqCvTrg+uFZYybvlrvMGBkIox+RVSRve+hZ0nAsJj+FG7owT6QN3Ncyrcrf7aRSOXYGRA5Uvx5UH6JQoBDwKVpWai+x kryten@trusty"
+          root_authorized_keys: {{ pillar['zone']['defaults']['ssh_keys']|first }}
           cloud-init:user-data: |
             #cloud-config
 
@@ -55,8 +55,6 @@ zone_{{ name }}:
             dns_domain: {{ zone['dns_domain'] }}
 
             apt:
-              http_proxy: http://apt.bayphoto.com/
-              https_proxy: DIRECT
               sources:
                 salt:
                   keyserver: "https://repo.saltstack.com/py3/ubuntu/18.04/amd64/2019.2/SALTSTACK-GPG-KEY.pub"
@@ -86,9 +84,7 @@ zone_{{ name }}:
                 sudo: "ALL=(ALL) NOPASSWD:ALL"
                 lock_passwd: true
                 shell: /bin/bash
-                ssh_authorized_keys:
-                  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDThfGA6c88VJPeqJHSRlQT8GplLGUXidtHc+3L4zHHu31H5By2yRnWEnCB1+MXgmP41kFhu1ZKa6TfvrbDXVsXj7awQt0d45RP9mKcKTMCKK41PXap78bsz9QcNdYVI1UP3BGEQRxrrIo3QINVzgz1cu9Wqwcer03KA4pf/6givvYCAEUr9U5/HC6BoBzqS1CxrUVVOuL9lCrVaFZOXN0fldsjXNn2CYjIDxvST1oygOB7lfIaS61HS3mBfrqCvTrg+uFZYybvlrvMGBkIox+RVSRve+hZ0nAsJj+FG7owT6QN3Ncyrcrf7aRSOXYGRA5Uvx5UH6JQoBDwKVpWai+x kryten@trusty
-                  - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCr8LopRSIg+Ng7oWqEqfxcXL+Ly8FK3E1A/RMvMHOOSV7zXCrqZnFhtXA3PByYG0xXRJjI2G2Kt0OwCR6UWfRSom/GIXuZQUyd8fq6QaceY+L7SnyekLRsfpTaJ6hxQoxCi18tiIMJQhp21reclyJ9up1Sncju75y1T2aI9Gu035TYBFGs9kiGOz+MI25TDiUKmXML9UcWaOzTtt2WQopV9i0sYHtSFeOKT3UCqtjCzy/tx9iOn8c0Hzzpm/7L8KPBlOZXCit2NlmWjWzX+fhdGt/i2NOmpZ1Ni0bX4FRwvTTJevdl8KPm0Epef/63wOAoKER5F0lY3BgKYwTdfshn zsolt@hyperion
+                ssh_authorized_keys: {{ pillar['zone']['defaults']['ssh_keys'] }}
 
             final_message: "Is this thing on? $UPTIME"
 

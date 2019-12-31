@@ -4,12 +4,19 @@ base:
     - test
     - ip-mine
 
+  'virtual:physical':
+    - match: grain
+    - grains
+
   'datacenter:*':
     - match: grain
     - kubernetes
 
-
   # hypervisor pillars
+
+  'hyper:roles:*':
+    - match: grain
+    - zones
 
   'hyper:roles:etcd':
     - match: grain

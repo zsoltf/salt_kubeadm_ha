@@ -1,8 +1,6 @@
 #cloud-config
 
 apt:
-  http_proxy: http://apt.bayphoto.com/
-  https_proxy: DIRECT
   sources:
     salt:
       keyserver: "https://repo.saltstack.com/py3/ubuntu/18.04/amd64/2019.2/SALTSTACK-GPG-KEY.pub"

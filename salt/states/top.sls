@@ -2,6 +2,10 @@ base:
   '*':
     - test
 
+  'virtual:physical':
+    - match: grain
+    - grains
+
   'os:SmartOS':
     - match: grain
     - zones

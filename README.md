@@ -137,6 +137,6 @@ cd test
 
 
 ## TODO
-- ssh keys from pillar
+- apt mirror
 - orchestrate on kvm clusters
 - redhat support

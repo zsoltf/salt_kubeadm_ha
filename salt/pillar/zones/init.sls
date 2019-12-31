@@ -21,3 +21,7 @@ zones:
   {{ name|yaml }}: {{ zone|yaml }}
 {% endfor -%}
 {%- endmacro %}
+
+
+zone:
+  defaults: {{ defaults|yaml }}

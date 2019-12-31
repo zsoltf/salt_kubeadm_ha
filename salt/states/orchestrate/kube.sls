@@ -1,5 +1,5 @@
 # bootstrap:
-# edit pillar/kube.sls
+# edit pillar/kubernetes.sls
 
 orchestrate-kubeadm:
   salt.runner:
@@ -14,4 +14,3 @@ orchestrate-kuberentes:
         - orchestrate.kubernets
     - require:
       - salt: orchestrate-kubeadm
-

@@ -13,7 +13,7 @@
           password: kube
           interface: net0
           track_script: check_haproxy
-          virtual_ip: "{{ pillar['kubernetes']['apiserver'] }}/23 dev net0"
+          virtual_ip: "{{ salt['pillar.get']('kubernetes:apiserver', 'localhost') }}/23 dev net0"
           virtual_router_id: 60
 
 {% endload %}

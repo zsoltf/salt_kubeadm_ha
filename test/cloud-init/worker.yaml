@@ -1,0 +1,29 @@
+#cloud-config
+
+bootcmd:
+  - 'systemctl mask swap.target'
+  - 'swapoff -a'
+
+apt:
+  http_proxy: http://apt.bayphoto.com/
+  https_proxy: DIRECT
+  sources:
+    salt:
+      keyserver: "https://repo.saltstack.com/py3/ubuntu/18.04/amd64/2019.2/SALTSTACK-GPG-KEY.pub"
+      keyid: "0E08A149DE57BFBE"
+      source: "deb http://repo.saltstack.com/py3/ubuntu/18.04/amd64/2019.2 bionic main"
+
+salt_minion:
+  conf:
+    master: salt
+  grains:
+    app: kubernetes
+    datacenter: test
+    kube:
+      role: worker
+
+mounts:
+  - [ swap ]
+
+swap:
+  size: 0

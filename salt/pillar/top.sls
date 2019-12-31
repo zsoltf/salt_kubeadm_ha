@@ -3,4 +3,7 @@ base:
   '*':
     - test
     - ip-mine
-    - kube
+
+  'kube:role':
+    - match: grain
+    - kubernetes

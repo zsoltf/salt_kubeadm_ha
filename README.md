@@ -2,7 +2,7 @@
 
 Create highly available Kubernetes clusters with Kubeadm and Salt.
 
-This state assumes the infrastructure is already set up and at least 4 VMs are joined to the salt master.
+This state works with Ubuntu VMs. Centos/Fedora support will be added later.
 
 See *salt_kubeadm_ha_cluster* for an example on how to create highly available clusters on bare metal.
 
@@ -13,10 +13,10 @@ See *salt_kubeadm_ha_cluster* for an example on how to create highly available c
 
 Kubernetes nodes are named `kube-role-number` with grains `kube:role:rolename` set.
 
-* One or more Master with id `kube-master-\d.*` (kube-master-1, kube-master-2, kube-master-3)
-* One or more LB with id `kube-lb-\d.*` (kube-lb-1, etc)
-* One or more Etcd with id `kube-etcd-\d.*` (kube-etcd-1, etc)
-* One or more Worker with id `kube-worker-\d.*` (kube-worker-1, etc)
+* Master with id `kube-master-\d.*` (kube-master-1, kube-master-2, kube-master-3)
+* LB with id `kube-lb-\d.*` (kube-lb-1, etc)
+* Etcd with id `kube-etcd-\d.*` (kube-etcd-1, etc)
+* Worker with id `kube-worker-\d.*` (kube-worker-1, etc)
 
 Salt Master settings:
 
@@ -29,22 +29,9 @@ minionfs_mountpoint: salt://minionfs
 ```
 
 
-Resources:
-
-| machine       | count | cpu | memory |
-|---------------|-------|-----|--------|
-| load balancer |     2 |   2 |   1024 |
-| etcd          |     3 |   2 |   2048 |
-| master        |     3 |   2 |   2048 |
-| worker        |     3 |   2 |   2048 |
-|---------------|-------|-----|--------|
-|               |    11 |   8 |   7168 |
-
-
-
-
 #### Set Grains
 
+manually:
 ```
 salt 'kube-etcd-*' grains.set kube:role etcd
 salt 'kube-lb-*' grains.set kube:role lb
@@ -52,11 +39,17 @@ salt 'kube-master-*' grains.set kube:role master
 salt 'kube-worker-*' grains.set kube:role worker
 ```
 
+cloud-init example see `test/cloud-init`
 
 #### Set Pillars
 
-`salt/pillar/kube.sls`
+`$EDITOR salt/pillar/kubernetes.sls`
 
+#### Verify Mine
+
+```
+salt-call mine.get '*' ip
+```
 
 #### Orchestrate
 
@@ -75,10 +68,18 @@ Apply addons and user accounts
 salt-run state.orch orchestrate.kubernetes
 ```
 
+## Test Cluster
+
+Run the entire cluster locally with multipass on Ubuntu
+```
+cd test
+./bootstrap-salt.sh
+./create-cluster.sh
+```
 
 ## Pillars
 
-`salt/pillar/kube.sls`
+`salt/pillar/kubernetes.sls`
 `salt/pillar/ip-mine.sls`
 
 

@@ -2,6 +2,11 @@ include:
   - .docker
   - repos.google-cloud
 
+kubernetes-pillar-configured:
+  test.check_pillar:
+    - present:
+        - kubernetes
+
 kubeadm-packages:
   pkg.installed:
     - pkgs:

@@ -32,13 +32,21 @@ deploy-etcd-configs:
 
 ### install load balancer ###
 
-install-lb:
+install-lb-keepalived:
   salt.state:
     - tgt: 'kube:role:lb'
     - tgt_type: grain
     - sls:
         - kubeadm.lb.keepalived
+
+install-lb-haproxy:
+  salt.state:
+    - tgt: 'kube:role:lb'
+    - tgt_type: grain
+    - sls:
         - kubeadm.lb.haproxy
+    - require:
+      - salt: install-lb-keepalived
 
 ### install control plane ###
 

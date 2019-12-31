@@ -9,7 +9,7 @@ haproxy-config:
     - name: /etc/haproxy/haproxy.cfg
     - context:
         kube_mine: {{ kube_mine|yaml }}
-        apiserver: {{ pillar['kubernetes']['apiserver'] }}
+        apiserver: {{ salt['pillar.get']('kubernetes:apiserver', 'localhost') }}
     - source: salt://kubeadm/lb/haproxy.cfg.jinja
     - template: jinja
 

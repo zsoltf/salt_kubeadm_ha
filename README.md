@@ -4,14 +4,6 @@ Create highly available Kubernetes clusters with Kubeadm and Salt.
 
 This state follows the official [kubeadm guide for HA clusters](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/) as close as possible.
 
-First, it bootstraps the Etcd cluster by generating all the certs on the first node, uploading them to the salt master and distributing them to the rest of the etcd nodes.
-
-Then it creates the VIP with keepalived and sets up HAProxy on the load balancers.
-
-After the LBs are up, the first master node bootstraps the kubernetes cluster using the tokens defined in the pillar.
-
-It then joins the rest of the control plane nodes, and once that's successful the worker nodes get joined.
-
 It can bootstrap VMs on bare metal with SmartOS or existing VMs joined to a salt master can be used.
 
 Works with Ubuntu VMs. Centos/Fedora support will be added later.

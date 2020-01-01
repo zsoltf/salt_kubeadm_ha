@@ -12,6 +12,10 @@ base:
     - match: grain
     - kubernetes
 
+  'kube:role:lb':
+    - match: grain
+    - loadbalancer
+
   # hypervisor pillars
 
   'hyper:roles:*':

@@ -65,6 +65,11 @@ Create KVM/Bhyve zones
 salt-run state.orch orchestrate.zones
 ```
 
+Define load balancer settings
+```
+$EDITOR salt/pillar/loadbalancer.sls
+```
+
 Create a Kubernetes cluster
 ```
 salt-run state.orch orchestrate.kube

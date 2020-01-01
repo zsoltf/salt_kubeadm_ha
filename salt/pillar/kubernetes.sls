@@ -8,6 +8,9 @@ base:
 home:
   apiserver: 192.168.100.99
 
+test:
+  apiserver: 10.193.227.254
+
 {% endload %}
 {% set kube = salt['grains.filter_by'](map, grain='datacenter', base='base') %}
 
